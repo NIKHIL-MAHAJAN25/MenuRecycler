@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="CardShapeTopRounded" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">40dp</item>
+        <item name="cornerSizeTopRight">40dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+    <style name="CardViewRoundedTop" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearance">@style/CardShapeTopRounded</item>
+        <item name="cardBackgroundColor">#99CCDC</item> <!-- optional, your color -->
+
+        <item name="strokeWidth">1dp</item>
+    </style>
+    <style name="CardViewSignIn" parent="Widget.MaterialComponents.CardView">
+        <item name="shapeAppearance">@style/CardShapeTopRounded</item>
+        <item name="cardBackgroundColor">@color/white</item> <!-- optional, your color -->
+        <item name="strokeWidth">1dp</item>
+    </style>
+</resources>

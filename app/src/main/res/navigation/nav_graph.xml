@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/frag_cuisines"
+    android:id="@+id/nav_graph">
+    <fragment
+        android:id="@+id/frag_cuisines"
+        android:name="com.nikhil.menurecycler.CuisinesFrag"
+        tools:layout="@layout/fragment_cuisines"
+        android:label="Cuisines List"/>
+
+    <fragment
+        android:id="@+id/AddFrag"
+        android:name="com.nikhil.menurecycler.AddFrag"
+        tools:layout="@layout/fragment_add"
+        android:label="Addition"/>
+    <fragment
+        android:id="@+id/dishlist"
+        android:name="com.nikhil.menurecycler.DishFragment"
+        tools:layout="@layout/fragment_dish"
+        android:label="dishlist"/>
+    <fragment
+        android:id="@+id/fragmentaddsubcuisine"
+        android:name="com.nikhil.menurecycler.AddSubCuisinesFrag"
+        tools:layout="@layout/fragment_sub_cuisines_add"
+        android:label="sub cuisine"/>
+
+
+
+</navigation>

@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "1018587909381",
+    "firebase_url": "https://fir-practice-903f1-default-rtdb.firebaseio.com",
+    "project_id": "fir-practice-903f1",
+    "storage_bucket": "fir-practice-903f1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1018587909381:android:39e0e9956c817bdcd4fb6c",
+        "android_client_info": {
+          "package_name": "com.nikhil.firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB43pGEFMJDEJdmwSovmLnaWW-9a54JmhY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1018587909381:android:f9f19acc731e14c1d4fb6c",
+        "android_client_info": {
+          "package_name": "com.nikhil.menurecycler"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB43pGEFMJDEJdmwSovmLnaWW-9a54JmhY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
