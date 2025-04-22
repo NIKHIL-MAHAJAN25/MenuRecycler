@@ -1,5 +1,6 @@
 package com.nikhil.menurecycler
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -149,6 +150,16 @@ class CuisinesFrag : Fragment(),Inter {
     }
 
     override fun deleteclick(cuisine: CuisineData, position: Int) {
-        TODO("Not yet implemented")
+        val dialog= AlertDialog.Builder(requireContext())
+        dialog.setTitle("delete")
+        dialog.setMessage("Are you sure...")
+        dialog.setPositiveButton("Yes"){addDialog, _ ->
+            dbreference.child(cuisine.id ?: "").removeValue()
+        }
+        dialog.setNegativeButton("No"){addDialog, _ ->
+            addDialog.dismiss()
+        }
+        dialog.create()
+        dialog.show()
     }
 }

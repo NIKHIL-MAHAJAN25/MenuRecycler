@@ -19,6 +19,11 @@ import com.nikhil.menurecycler.dataclasses.CuisineData
 import com.nikhil.menurecycler.dataclasses.SubCuisine
 import com.nikhil.menurecycler.subcatrecycler.DishInter
 import com.nikhil.menurecycler.subcatrecycler.Dishadapter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,10 +41,10 @@ class DishFragment : Fragment(),DishInter {
     private var param2: String? = null
     lateinit var binding: FragmentDishBinding
     lateinit var dadapter: Dishadapter
-    var id:String?=null
-    var dbref:DatabaseReference=FirebaseDatabase.getInstance().reference
-    var array1=ArrayList<SubCuisine>()
-    val TAG="logs"
+    var id: String? = null
+    var dbref: DatabaseReference = FirebaseDatabase.getInstance().reference
+    var array1 = ArrayList<SubCuisine>()
+    val TAG = "logs"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -53,8 +58,8 @@ class DishFragment : Fragment(),DishInter {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentDishBinding.inflate(layoutInflater)
-        arguments?.let{
-            id=it.getString("cuisineId")
+        arguments?.let {
+            id = it.getString("cuisineId")
         }
         return binding.root
     }
@@ -62,61 +67,62 @@ class DishFragment : Fragment(),DishInter {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btnAddDish.setOnClickListener {
-            val bundle=Bundle()
-            bundle.putString("cuisineid",id)
-            findNavController().navigate(R.id.fragmentaddsubcuisine,bundle)
+            val bundle = Bundle()
+            bundle.putString("cuisineid", id)
+            findNavController().navigate(R.id.fragmentaddsubcuisine, bundle)
         }
-        dbref.child("dishes").orderByChild("cdishid").equalTo(id).addChildEventListener(object :ChildEventListener{
-            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                Log.e(TAG, "snapshot before${snapshot.value}")
-                val subcuisine: SubCuisine? = snapshot.getValue(SubCuisine::class.java)
-                subcuisine?.id = snapshot.key
-                Log.e(TAG, " snapshot ${snapshot.value} id:${snapshot.key}")
-                if (subcuisine != null) {
-                    array1.add(subcuisine)
-                    dadapter.notifyDataSetChanged()
+        dbref.child("dishes").orderByChild("cdishid").equalTo(id)
+            .addChildEventListener(object : ChildEventListener {
+                override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+                    Log.e(TAG, "snapshot before${snapshot.value}")
+                    val subcuisine: SubCuisine? = snapshot.getValue(SubCuisine::class.java)
+                    subcuisine?.id = snapshot.key
+                    Log.e(TAG, " snapshot ${snapshot.value} id:${snapshot.key}")
+                    if (subcuisine != null) {
+                        array1.add(subcuisine)
+                        dadapter.notifyDataSetChanged()
 
-                }
-                Log.e(TAG, "details ${subcuisine?.name}")
-            }
-
-            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
-                val subCuisine: SubCuisine? = snapshot.getValue(SubCuisine::class.java)
-                subCuisine?.id = snapshot.key
-                if (subCuisine != null) {
-                    array1.forEachIndexed { index, subCuisine1 ->
-                        if (subCuisine1.id == subCuisine.id) {
-                            array1[index] = subCuisine
-                            return@forEachIndexed
-                        }
                     }
-                    dadapter.notifyDataSetChanged()
+                    Log.e(TAG, "details ${subcuisine?.name}")
                 }
-            }
 
-            override fun onChildRemoved(snapshot: DataSnapshot) {
-                val subCuisine: SubCuisine? = snapshot.getValue(SubCuisine::class.java)
-                subCuisine?.id = snapshot.key
-                if (subCuisine != null) {
-                    array1.removeAll{it.id == subCuisine.id}
-                    dadapter.notifyDataSetChanged()
-
+                override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                    val subCuisine: SubCuisine? = snapshot.getValue(SubCuisine::class.java)
+                    subCuisine?.id = snapshot.key
+                    if (subCuisine != null) {
+                        array1.forEachIndexed { index, subCuisine1 ->
+                            if (subCuisine1.id == subCuisine.id) {
+                                array1[index] = subCuisine
+                                return@forEachIndexed
+                            }
+                        }
+                        dadapter.notifyDataSetChanged()
+                    }
                 }
-            }
 
-            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
-                TODO("Not yet implemented")
-            }
+                override fun onChildRemoved(snapshot: DataSnapshot) {
+                    val subCuisine: SubCuisine? = snapshot.getValue(SubCuisine::class.java)
+                    subCuisine?.id = snapshot.key
+                    if (subCuisine != null) {
+                        array1.removeAll { it.id == subCuisine.id }
+                        dadapter.notifyDataSetChanged()
 
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
+                    }
+                }
 
-        })
+                override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+
+            })
         array1.clear()
-        dadapter=Dishadapter(array1,this)
-        binding.Dishrecycler.layoutManager=LinearLayoutManager(requireContext())
-        binding.Dishrecycler.adapter=dadapter
+        dadapter = Dishadapter(array1, this)
+        binding.Dishrecycler.layoutManager = LinearLayoutManager(requireContext())
+        binding.Dishrecycler.adapter = dadapter
     }
 
     companion object {
@@ -144,14 +150,27 @@ class DishFragment : Fragment(),DishInter {
     }
 
     override fun deleteclick(subCuisine: SubCuisine, position: Int) {
-
-        val dialog= AlertDialog.Builder(requireContext())
-        dialog.setTitle("delete")
-        dialog.setMessage("Are you sure...")
-        dialog.setPositiveButton("Yes"){addDialog, _ ->
-            dbref.child(subCuisine.id ?: "").removeValue()
+        val dialog = AlertDialog.Builder(requireContext())
+        dialog.setTitle("Delete")
+        dialog.setMessage("Are you sure you want to delete this dish?")
+        dialog.setPositiveButton("Yes") { addDialog, _ ->
+            subCuisine.id?.let { key ->
+                dbref.child("dishes").child(key).removeValue()
+                    .addOnSuccessListener {
+                        if (position >= 0 && position < array1.size) {
+                            array1.removeAt(position)
+                            dadapter.notifyItemRemoved(position)
+                            Log.e(TAG, "Dish deleted successfully")
+                        }else{
+                            Log.e(TAG, "Invalid position: $position")
+                        }
+                    }
+                    .addOnFailureListener {
+                        Log.e(TAG, "Failed to delete dish: ${it.message}")
+                    }
+            }
         }
-        dialog.setNegativeButton("No"){addDialog, _ ->
+        dialog.setNegativeButton("No") { addDialog, _ ->
             addDialog.dismiss()
         }
         dialog.create()
